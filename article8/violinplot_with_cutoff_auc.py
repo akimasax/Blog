@@ -47,7 +47,6 @@ test_auc = roc_auc_score(test['Label'],test["Output"])
 #Combine training and test dataset for drawing violin plot
 all_data = pd.concat([train,test],axis=0,join='inner')
 all_data = all_data.reset_index(drop=True)
-all_data
 
 #Draw vioplin plot
 #Figure captions
