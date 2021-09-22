@@ -18,17 +18,6 @@ train_label = pd.concat([train_low_label,train_high_label],axis=0)
 #Combine data and label
 train = pd.concat([train_data,train_label],axis=1)
 
-#Calculate training auc, fpr, tpr, and thresholds
-from sklearn.metrics import roc_curve
-from sklearn.metrics import roc_auc_score
-fpr, tpr, thresholds = roc_curve(train['Label'],train['Output'])
-train_auc = roc_auc_score(train['Label'],train["Output"])
-
-#Decide optimal threshold (cutoff) value depend on Youden index
-Youden_index_candidates = tpr-fpr
-index = np.where(Youden_index_candidates==max(Youden_index_candidates))[0][0]
-cutoff = thresholds[index]
-
 #Create test dataset
 #Create test data
 random.seed(12345)
@@ -41,6 +30,18 @@ test_high_label = pd.DataFrame({'Dataset':['Test']*15,'Grade':['High']*15,'Label
 test_label = pd.concat([test_low_label,test_high_label],axis=0)
 #Combine data and label
 test = pd.concat([test_data,test_label],axis=1)
+
+#Calculate training auc, fpr, tpr, and thresholds
+from sklearn.metrics import roc_curve
+from sklearn.metrics import roc_auc_score
+fpr, tpr, thresholds = roc_curve(train['Label'],train['Output'])
+train_auc = roc_auc_score(train['Label'],train["Output"])
+
+#Decide optimal threshold (cutoff) value depend on Youden index
+Youden_index_candidates = tpr-fpr
+index = np.where(Youden_index_candidates==max(Youden_index_candidates))[0][0]
+cutoff = thresholds[index]
+
 #Calculate test auc
 test_auc = roc_auc_score(test['Label'],test["Output"])
 
